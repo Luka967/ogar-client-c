@@ -11,7 +11,7 @@ This respository has a goal to allow (Windows only :( ) users to connect to Ogar
 - [x] Mass, name and virus rendering
 - [x] W, space, game join, spectate (free-roam still doesn't work)
 - [ ] Produce EXE as one file
-- [ ] Text, FFA & Chart leaderboard (FFA leaderboard is implemented but weird)
+- [ ] Text, FFA & Chart leaderboard (FFA leaderboard is implemented only)
 
 ## Can't connect?
 **User:** Inform the server holder.
