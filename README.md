@@ -13,6 +13,13 @@ This respository has a goal to allow (Windows only :( ) users to connect to Ogar
 - [ ] Produce EXE as one file
 - [ ] Text, FFA & Chart leaderboard (FFA leaderboard is implemented but weird)
 
+## Can't connect?
+**User:** Inform the server holder.
+
+**Holder:** If you use files from `OgarProject/Ogar`, open up `src/GameServer.js` and find line `176`. Add characters `/*` at the beginning of line. Then find line 186 and add `*/` at the end of line.
+
+If you use an EXE file, no hope. You must download files from [here](https://github.com/OgarProject/Ogar/archive/master.zip) and proceed with the above.
+
 ## Using
 From the /binaries folder, download the version you want. **Download the EXE file AND the DLL file! Without the DLL file, not even a window won't show!**
 
