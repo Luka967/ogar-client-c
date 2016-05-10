@@ -10,15 +10,17 @@ namespace Client
 {
     public class Client
     {
-        public WebSocket WS { get; set; }
-        public List<Cell> VisibleCells { get; protected set; }
-        public List<uint> MyCells { get; protected set; }
-        public List<string> Leaderboard { get; protected set; }
-        public float Xpos = 0, Ypos = 0, Zoom = 0;
-        private float _zoom;
-        public double Score = 0;
-        public PointF MousePos { get; set; }
-        public volatile bool ShouldUpdate = false;
+        public  WebSocket    WS { get; set; }                       // WebSocket which connects to servers
+        public  List<Cell>   VisibleCells { get; protected set; }   // Visible cells
+        public  List<uint>   MyCells { get; protected set; }        // IDs of my cells
+        public  List<string> Leaderboard { get; protected set; }    // Leaderboard string list
+        public  float        Xpos = 0,                              // Center X position
+                             Ypos = 0,                              // Center Y position
+                             Zoom = 0;                              // Zoom to apply for drawing
+        private float        _zoom;                                 // Used for animation
+        public  double       Score = 0;                             // Client score
+        public  PointF       MousePos { get; set; }                 // Mouse position
+        public volatile bool ShouldUpdate = false;                  // Redraw trigger
 
         public Client(string connectTo)
         {
@@ -86,6 +88,7 @@ namespace Client
                         if ((opt & 8) != 0)
                             offset += 16;
 
+                        // Get nickname
                         string nick = "";
                         while (true)
                         {
@@ -100,6 +103,7 @@ namespace Client
                         int index = VisibleCells.FindIndex((v) => v.ID == ID);
                         if (index != -1)
                         {
+                            // Store shown size and shown mass for animation purposes
                             float shSz = this.VisibleCells[index].ShownRadius;
                             double shM = this.VisibleCells[index].ShownMass;
                             
@@ -119,6 +123,7 @@ namespace Client
                         }
                         else
                         {
+                            // Not shown, add to visible cells
                             this.VisibleCells.Add(new Cell(
                                 ID,
                                 Color.FromArgb(colorR, colorG, colorB),
@@ -134,6 +139,7 @@ namespace Client
                     // Disappearance
                     uint disappears = Packet.ReadUint32(data, ref offset);
 
+                    // Remove cells
                     for (int i = 0; i < disappears; i++)
                     {
                         uint ID = Packet.ReadUint32(data, ref offset);
@@ -145,13 +151,14 @@ namespace Client
                         }
                     }
 
+                    // Now comes our part
                     // First animate cells
                     this.UpdateAnimation();
                     // Update my position
                     this.UpdatePosition();
                     // Send info about my mouse position
                     this.SendMouseInfo();
-                    // Update has come, signal the form to invalidate
+                    // Signal the form to invalidate
                     this.ShouldUpdate = true;
                     break;
 
@@ -176,6 +183,9 @@ namespace Client
 
                     for (int i = 0; i < lbLength; i++)
                     {
+                        // Skip cell id uint reading
+                        offset += 4;
+                        
                         // Read strings
                         string user = "";
                         while (true)
